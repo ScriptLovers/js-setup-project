@@ -1,0 +1,11 @@
+{
+  "name": "<project>",
+  "version": "1.0.0",
+  "description": "Setup a JS project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "MatthieuLemoine",
+  "license": "MIT"
+}

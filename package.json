@@ -1,0 +1,38 @@
+{
+  "name": "setup-project",
+  "version": "1.0.0",
+  "description": "Setup a JS project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/MatthieuLemoine/setup-project.git"
+  },
+  "keywords": [
+    "setup",
+    "project",
+    "JS",
+    "Javascript",
+    "Node",
+    "ES6"
+  ],
+  "author": "MatthieuLemoine",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MatthieuLemoine/setup-project/issues"
+  },
+  "homepage": "https://github.com/MatthieuLemoine/setup-project#readme",
+  "dependencies": {
+    "shelljs": "^0.7.4",
+    "yargs": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.6.0",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-plugin-import": "^1.16.0",
+    "eslint-plugin-jsx-a11y": "^2.2.2",
+    "eslint-plugin-react": "^6.3.0"
+  }
+}
