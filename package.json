@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/MatthieuLemoine/setup-project#readme",
   "dependencies": {
+    "github-api": "^2.3.0",
     "shelljs": "^0.7.4",
     "yargs": "^5.0.0"
   },

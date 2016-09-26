@@ -6,7 +6,7 @@
 
 ## Usage
 
-    setup-project <projectName> -t <template>
+    setup-project <projectName> -t <template> -o <githubToken> --github
 
 ## Examples
 
@@ -23,3 +23,7 @@
 - Create a react-native project
 
         setup-project exampleProject -t react-native
+
+- Create a node project with creation of a GitHub repo (GitHub token will be looked for in ``~/.setup-project/config.json``)
+
+        setup-project exampleProject -t node --github
