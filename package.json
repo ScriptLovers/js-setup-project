@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/MatthieuLemoine/setup-project.git"
+    "url": "git+ssh://git@github.com/ScriptLovers/js-setup-project.git"
   },
   "keywords": [
     "setup",
@@ -19,14 +19,15 @@
     "JS",
     "Javascript",
     "Node",
-    "ES6"
+    "ES6",
+    "ScriptLovers"
   ],
   "author": "MatthieuLemoine",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MatthieuLemoine/setup-project/issues"
+    "url": "https://github.com/ScriptLovers/js-setup-project/issues"
   },
-  "homepage": "https://github.com/MatthieuLemoine/setup-project#readme",
+  "homepage": "https://github.com/ScriptLovers/js-setup-project#readme",
   "dependencies": {
     "chalk": "^1.1.3",
     "github-api": "^2.3.0",
