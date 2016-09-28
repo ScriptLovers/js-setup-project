@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-const sh       = require('shelljs');
-const utils    = require('./utils');
-const path     = require('path');
+const sh    = require('shelljs');
+const utils = require('./utils');
+const path  = require('path');
+const chalk = require('chalk');
 
 // Template keys
 const NODE_KEY         = 'node';
@@ -35,7 +36,7 @@ function setupProject({ rootDir, projectName, template, token, github }) {
   sh.mkdir(projectDir);
   sh.mkdir(binDir);
   sh.cd(projectDir);
-  console.log('Project directory created');
+  console.log(chalk.green('Project directory created'));
 
   // Create project files from templates
   sh.cp(gitignoreTemplate, gitignoreFile);
@@ -55,9 +56,9 @@ function setupProject({ rootDir, projectName, template, token, github }) {
       sh.cp(eslintReactNativeTemplate, eslintFile);
       break;
     default:
-      console.error('Invalid template key');
+      console.error(chalk.red('Invalid template key'));
   }
-  console.log('Template pasted');
+  console.log(chalk.green('Template pasted'));
 
   // Init git
   sh.exec('git init');
@@ -73,13 +74,13 @@ function setupProject({ rootDir, projectName, template, token, github }) {
       };
       utils.replaceInFile(packageFile, templateVariables);
       utils.replaceInFile(readmeFile, templateVariables);
-      console.log('Variables replaced');
+      console.log(chalk.green('Variables replaced'));
 
       // Install devDependencies
-      console.log('Installing dependencies... It may takes a while...');
+      console.log(chalk.blue('Installing dependencies... It may takes a while...'));
       sh.exec('npm i --save-dev eslint eslint-config-airbnb eslint-plugin-import' +
         ' eslint-plugin-jsx-a11y eslint-plugin-react');
 
-      console.log('Project has been setup');
+      console.log(chalk.green('Project has been setup'));
     });
 }

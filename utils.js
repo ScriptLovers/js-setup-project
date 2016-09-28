@@ -2,6 +2,8 @@ const fs       = require('fs');
 const userHome = require('user-home');
 const sh       = require('shelljs');
 const GitHub   = require('github-api');
+const chalk    = require('chalk');
+
 
 const fileOpts     = { encoding : 'utf8' };
 const configFolder = `${userHome}/.setup-project`;
@@ -25,9 +27,9 @@ function createRepo(shouldCreate, token, name) {
         sh.exec(`git remote add origin ${sshUrl}`);
         return sshUrl;
       })
-      .catch(err => console.error(`Error while creating GitHub repo : ${err}`));
+      .catch(err => console.error(chalk.red(`Error while creating GitHub repo : ${err}`)));
   } else if (shouldCreate) {
-    console.warn('GitHub token is missing. GitHub repo has not been created');
+    console.warn(chalk.yellow('GitHub token is missing. GitHub repo has not been created'));
   }
   return Promise.resolve('');
 }
