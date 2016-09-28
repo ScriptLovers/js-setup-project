@@ -1,71 +1,85 @@
 #!/usr/bin/env node
 const sh       = require('shelljs');
 const utils    = require('./utils');
-const argv     = require('yargs')
-  .usage('Usage: $0 <name> -t [template] --github -o [githubToken]')
-  .boolean('github')
-  .alias('t', 'template')
-  .alias('o', 'oauth')
-  .demand(1, ['t'])
-  .argv;
+const path     = require('path');
 
+// Template keys
 const NODE_KEY         = 'node';
 const REACT_KEY        = 'react';
 const REACT_NATIVE_KEY = 'react-native';
-const templateDir      = `${__dirname}/templates`;
+// Templates
+const templateDir               = path.join(__dirname, 'templates');
+const gitignoreTemplate         = path.join(templateDir, '.gitignore.template');
+const packageTemplate           = path.join(templateDir, 'package.template.json');
+const indexTemplate             = path.join(templateDir, 'index.template.js');
+const binIndexTemplate          = path.join(templateDir, 'bin-index.template.js');
+const readmeTemplate            = path.join(templateDir, 'README.template.md');
+const eslintNodeTemplate        = path.join(templateDir, '.eslintrc.node.template.json');
+const eslintReactTemplate       = path.join(templateDir, '.eslintrc.react.template.json');
+const eslintReactNativeTemplate = path.join(templateDir, '.eslintrc.react-native.template.json');
 
-const projectName = argv._[0];
+module.exports = setupProject;
 
-// Load config
-const config = utils.loadConfig();
+function setupProject({ rootDir, projectName, template, token, github }) {
+  // Project files
+  const projectDir    = path.join(rootDir, projectName);
+  const binDir        = path.join(projectDir, 'bin');
+  const gitignoreFile = path.join(projectDir, '.gitignore');
+  const packageFile   = path.join(projectDir, 'package.json');
+  const indexFile     = path.join(projectDir, 'index.js');
+  const readmeFile    = path.join(projectDir, 'README.md');
+  const eslintFile    = path.join(projectDir, '.eslintrc.json');
+  const binIndexFile  = path.join(binDir, 'index.js');
 
-// Create project dir
-sh.mkdir(projectName);
-sh.cd(projectName);
-console.log('Project directory created');
+  // Create project dir
+  sh.mkdir(projectDir);
+  sh.mkdir(binDir);
+  sh.cd(projectDir);
+  console.log('Project directory created');
 
-// Paste templates
-sh.cp(`${templateDir}/.gitignore.template`, '.gitignore');
-sh.cp(`${templateDir}/package.template.json`, 'package.json');
-sh.cp(`${templateDir}/index.template.js`, 'index.js');
-sh.chmod('u+x', 'index.js');
-sh.cp(`${templateDir}/README.template.md`, 'README.md');
-switch (argv.template) {
-  case NODE_KEY:
-    sh.cp(`${templateDir}/.eslintrc.node.template.json`, '.eslintrc.json');
-    break;
-  case REACT_KEY:
-    sh.cp(`${templateDir}/.eslintrc.react.template.json`, '.eslintrc.json');
-    break;
-  case REACT_NATIVE_KEY:
-    sh.cp(`${templateDir}/.eslintrc.react-native.template.json`, '.eslintrc.json');
-    break;
-  default:
-    console.error('Invalid template key');
+  // Create project files from templates
+  sh.cp(gitignoreTemplate, gitignoreFile);
+  sh.cp(packageTemplate, packageFile);
+  sh.cp(indexTemplate, indexFile);
+  sh.cp(binIndexTemplate, binIndexFile);
+  sh.chmod('u+x', binIndexFile);
+  sh.cp(readmeTemplate, readmeFile);
+  switch (template) {
+    case NODE_KEY:
+      sh.cp(eslintNodeTemplate, eslintFile);
+      break;
+    case REACT_KEY:
+      sh.cp(eslintReactTemplate, eslintFile);
+      break;
+    case REACT_NATIVE_KEY:
+      sh.cp(eslintReactNativeTemplate, eslintFile);
+      break;
+    default:
+      console.error('Invalid template key');
+  }
+  console.log('Template pasted');
+
+  // Init git
+  sh.exec('git init');
+
+  // Create GitHub repo if needed
+  utils
+    .createRepo(github, token, projectName)
+    .then(sshUrl => {
+      // Replace in templates
+      const templateVariables = {
+        '<project>'    : projectName,
+        '<repoSshUrl>' : sshUrl
+      };
+      utils.replaceInFile(packageFile, templateVariables);
+      utils.replaceInFile(readmeFile, templateVariables);
+      console.log('Variables replaced');
+
+      // Install devDependencies
+      console.log('Installing dependencies... It may takes a while...');
+      sh.exec('npm i --save-dev eslint eslint-config-airbnb eslint-plugin-import' +
+        ' eslint-plugin-jsx-a11y eslint-plugin-react');
+
+      console.log('Project has been setup');
+    });
 }
-console.log('Template pasted');
-
-// Init git
-sh.exec('git init');
-
-// Create GitHub repo if needed
-const token = argv.oauth || config.token;
-utils
-  .createRepo(argv.github, token, projectName)
-  .then(sshUrl => {
-    // Replace in templates
-    const templateVariables = {
-      '<project>'    : projectName,
-      '<repoSshUrl>' : sshUrl
-    };
-    utils.replaceInFile('package.json', templateVariables);
-    utils.replaceInFile('README.md', templateVariables);
-    console.log('Variables replaced');
-
-    // Install devDependencies
-    console.log('Installing dependencies... It may takes a while...');
-    sh.exec('npm i --save-dev eslint eslint-config-airbnb eslint-plugin-import' +
-      ' eslint-plugin-jsx-a11y eslint-plugin-react');
-
-    console.log('Project has been setup');
-  });

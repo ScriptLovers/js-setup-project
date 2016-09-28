@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Setup a JS project",
   "main": "index.js",
+  "bin": {
+    "<project>": "bin/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+ssh://<repoSshUrl>"

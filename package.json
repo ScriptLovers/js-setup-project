@@ -30,6 +30,7 @@
   "dependencies": {
     "github-api": "^2.3.0",
     "shelljs": "^0.7.4",
+    "user-home": "^2.0.0",
     "yargs": "^5.0.0"
   },
   "devDependencies": {

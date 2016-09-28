@@ -1,3 +1,5 @@
-#!/usr/bin/env node
+module.exports = lib;
 
-process.stdout.write('Hello World\n');
+function lib() {
+  process.stdout.write('Hello World\n');
+}

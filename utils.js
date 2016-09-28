@@ -52,7 +52,7 @@ function replaceInFile(fileName, map) {
   let file = fs.readFileSync(fileName, fileOpts);
   Object.keys(map).forEach(key => {
     const value = map[key];
-    file = file.replace(key, value);
+    file = file.split(key).join(value);
   });
   fs.writeFileSync(fileName, file, fileOpts);
 }
